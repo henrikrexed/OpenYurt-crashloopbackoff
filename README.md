@@ -53,7 +53,7 @@ sudo multipass shell k8s-control-plane
 ```
 Once connected let's get the setup script deploy k8s v1.30
 ```shell
-wget 
+wget https://raw.githubusercontent.com/henrikrexed/OpenYurt-crashloopbackoff/refs/heads/master/k8s%20cluster/setup.sh
 chmod 777 setup.sh
 ./setup.sh
 ```
@@ -90,7 +90,7 @@ multipass shell k8s-worker-node
 ```
 and let's install k8S v1.30
 ```shell
-wget setup script
+wget https://raw.githubusercontent.com/henrikrexed/OpenYurt-crashloopbackoff/refs/heads/master/k8s%20cluster/setup.sh
 chmod 777 setup.sh
 ./setup.sh
 ```
