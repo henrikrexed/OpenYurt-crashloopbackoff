@@ -1,0 +1,230 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    meta.helm.sh/release-name: yurt-manager
+    meta.helm.sh/release-namespace: kube-system
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: yurt-manager-basecontroller
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - controllerrevisions
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - nodebuckets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - nodepools
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - yurtappdaemons
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - yurtappoverriders
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - yurtappsets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - yurtstaticsets/status
+  verbs:
+  - update
+  - patch
+- apiGroups:
+  - apps.openyurt.io
+  resources:
+  - yurtstaticsets
+  verbs:
+  - list
+  - watch
+  - patch
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests/approval
+  verbs:
+  - update
+  - patch
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - list
+  - watch
+  - update
+  - patch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - list
+  - get
+  - create
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - create
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - list
+  - watch
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - list
+  - watch
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  - secrets
+  verbs:
+  - create
+  - get
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts/token
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - crd.projectcalico.org
+  resources:
+  - blockaffinities
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - iot.openyurt.io
+  resources:
+  - platformadmins
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - network.openyurt.io
+  resources:
+  - poolservices
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - raven.openyurt.io
+  resources:
+  - gateways
+  verbs:
+  - list
+  - watch
