@@ -66,7 +66,7 @@ Let's launch our control-plane by connecting on the control-plane ( `sudo multip
 ```shell
 sudo kubeadm init \
 --pod-network-cidr 10.244.0.0/16 \
---apiserver-advertise-address 10.0.0.97
+--apiserver-advertise-address 10.0.0.100
 ```
 note: replace the apiserver adress with the ip return by multipass
 
@@ -80,7 +80,7 @@ Once your kubeconfig is configured, we can install the networking layer of our c
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
 
-### 2.Let's start the control plane
+### 2.Let's start the worker node
 ```shell
 multipass launch --name k8s-worker-node --bridged --cpus 2 --memory 2G --disk 5G 22.04
 ```
@@ -98,8 +98,8 @@ Let's reboot the worker node : sudo reboot
 once the vm resarted , let's connect :`sudo multipass shell k8s-worker-node`
 let's join our node to the control-plane:
 ```shell
-sudo kubeadm join 10.0.0.97:6443 --token qgpdv5.7m9dhlwz1urps4vj \
---discovery-token-ca-cert-hash sha256:b1a1f59171ad54fbe87be2ed0f36ad8de107de346e488764aa5c25bcd73e39f4 
+sudo kubeadm join 10.0.0.100:6443 --token i3l8b6.ev7qp0fl5q4nhim1 \
+	--discovery-token-ca-cert-hash sha256:3997edfa489aae75c216099d2a65f8695af9ecfce191f63f77e5ff507b3ed2a8 
 ```
 make sure to replace the ip and the token provided after launching the control-plane
 
@@ -124,7 +124,7 @@ kubectl delete pod -l app.kubernetes.io/name=yurt-manager -n kube-system
 ```
 let's use the ip of our control-plane to install yurt-hub:
 ```shell
-helm upgrade --install yurt-hub -n kube-system --set kubernetesServerAddr=https://10.0.0.97:6443 openyurt/yurthub
+helm upgrade --install yurt-hub -n kube-system --set kubernetesServerAddr=https://10.0.0.100:6443 openyurt/yurthub
 ```
 Last we need to install raven, once all the pod of yurt hub is running.
 ```shell
@@ -133,7 +133,7 @@ helm upgrade --install raven-agent -n kube-system openyurt/raven-agent
 
 ### 3.Let's create a cloud instance
 ```shell
-multipass launch --name k8s-cloud-node --bridged --cpus 2 --memory 1G --disk 4G 22.04
+multipass launch --name k8s-cloud-node --bridged --cpus 2 --memory 1G --disk 4G 20.04
 ```
 once the machine is ready, let's connect to it with sudo multipass shell k8s-cloud-node
 
@@ -145,16 +145,17 @@ and launch the containerd service :
 ```shell
 sudo systemctl enable containerd
 sudo systemctl start containerd
+
 ```
 Now that we have install yumadm :
 ```shell
-wget https://github.com/openyurtio/openyurt/releases/download/v1.6.1/yurtadm-v1.6.1-linux-arm64.tar.gz
-tar -xzf yurtadm-v1.6.1-linux-arm64.tar.gz 
+wget https://github.com/openyurtio/openyurt/releases/download/v1.4.1/yurtadm-v1.4.1-linux-arm64.tar.gz
+tar -xzf yurtadm-v1.4.1-linux-arm64.tar.gz 
 cd linux-arm64/
 ```
 let's join our cloud node to our cluster ( you will need the ip and the token of our control plane) : 
 ```shell
-sudo ./yurtadm join 10.0.0.97:6443 --token qgpdv5.7m9dhlwz1urps4vj  --node-type=cloud --discovery-token-unsafe-skip-ca-verification --cri-socket=/run/containerd/containerd.sock --v=5
+sudo ./yurtadm join 10.0.0.100:6443 --token i3l8b6.ev7qp0fl5q4nhim1  --node-type=cloud --discovery-token-unsafe-skip-ca-verification --cri-socket=/run/containerd/containerd.sock --v=5
 ```
 ### 3.Let's create an edge instance
 
@@ -168,23 +169,8 @@ Preconfigure the instance by adding the:
 - default password.
 
 Once the raspberryPi is running , let's connect using ssh and install :
-
-Let's first install contairned :
+first let's enable cgroup:
 ```shell
-sudo apt install containerd 
-```
-and launch the containerd service :
-```shell
-sudo systemctl enable containerd
-sudo systemctl start containerd
-```
-Now that we have install yumadm :
-```shell
-wget https://github.com/openyurtio/openyurt/releases/download/v1.6.1/yurtadm-v1.6.1-linux-arm64.tar.gz
-tar -xzf yurtadm-v1.6.1-linux-arm64.tar.gz 
-cd linux-arm64/
-```
-let's join our cloud node to our cluster ( you will need the ip and the token of our control plane) :
-```shell
-sudo ./yurtadm join 10.0.0.97:6443 --token qgpdv5.7m9dhlwz1urps4vj  --node-type=edge --discovery-token-unsafe-skip-ca-verification --cri-socket=/run/containerd/containerd.sock --v=5
+sudo sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/' /boot/firmware/cmdline.txt
+sudo reboot
 ```
