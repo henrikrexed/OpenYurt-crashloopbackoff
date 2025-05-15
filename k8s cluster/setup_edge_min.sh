@@ -1,6 +1,6 @@
 #!/bin/bash -e
 swapoff -a
-sed -i '/ swap / Ys/^\(.*\)$/#\1/g' /etc/fstab
+sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 
 
