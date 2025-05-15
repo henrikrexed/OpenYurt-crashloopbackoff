@@ -141,26 +141,18 @@ helm upgrade --install raven-agent -n kube-system openyurt/raven-agent
 sudo multipass launch --name k8s-cloud-node --bridged --cpus 2 --memory 1G --disk 4G 20.04
 ```
 once the machine is ready, let's connect to it with sudo multipass shell k8s-cloud-node
+and let's install k8S v1.30
+```shell
+wget https://raw.githubusercontent.com/henrikrexed/OpenYurt-crashloopbackoff/refs/heads/master/k8s%20cluster/setup.sh
+chmod 777 setup.sh
+sudo ./setup.sh
+```
+Let's restart the machine and reconnect 
 
-Let's first install contairned :
-```shell
-sudo apt install containerd 
-```
-and launch the containerd service :
-```shell
-sudo systemctl enable containerd
-sudo systemctl start containerd
-
-```
-Now that we have install yumadm :
-```shell
-wget https://github.com/openyurtio/openyurt/releases/download/v1.4.1/yurtadm-v1.4.1-linux-arm64.tar.gz
-tar -xzf yurtadm-v1.4.1-linux-arm64.tar.gz 
-cd linux-arm64/
-```
 let's join our cloud node to our cluster ( you will need the ip and the token of our control plane) : 
 ```shell
-sudo ./yurtadm join 10.0.0.100:6443 --token i3l8b6.ev7qp0fl5q4nhim1  --node-type=cloud --discovery-token-unsafe-skip-ca-verification --cri-socket=/run/containerd/containerd.sock --v=5
+sudo kubeadm join 10.0.0.100:6443 --token i3l8b6.ev7qp0fl5q4nhim1 \
+	--discovery-token-ca-cert-hash sha256:3997edfa489aae75c216099d2a65f8695af9ecfce191f63f77e5ff507b3ed2a8 
 ```
 ### 3.Let's create an edge instance
 
