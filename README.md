@@ -21,6 +21,10 @@ The following tools need to be install on your machine :
 - multipass
 - 2 rasperriPi 3B
 
+
+First we want to build the following cluster: 
+<p align="center"><img src="/image/cluster.png" width="40%" alt="Logs IG" /></p>
+
 ## Create a k8S cluster
 
 ### 1.Let's configure the bridge network
@@ -187,7 +191,12 @@ sudo kubeadm join 10.0.0.100:6443 --token i3l8b6.ev7qp0fl5q4nhim1 \
 	--discovery-token-ca-cert-hash sha256:3997edfa489aae75c216099d2a65f8695af9ecfce191f63f77e5ff507b3ed2a8 
 ```
 
-## concert nodes to openyurt
+## Convert our nodes to openyurt
+
+With our current cluster we want to introduce OpenYur and build the following architecture:
+
+first we want to build the following cluster:
+<p align="center"><img src="/image/target.png" width="40%" alt="Logs IG" /></p>
 
 ### 1. label our edge nodes:
 ```shell
