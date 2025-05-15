@@ -51,7 +51,7 @@ sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 # If the directory `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
 # sudo mkdir -p -m 755 /etc/apt/keyrings
-c
+
 
 sudo modprobe overlay
 sudo modprobe br_netfilter
