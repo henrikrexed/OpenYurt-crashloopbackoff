@@ -1,6 +1,9 @@
 #!/bin/bash -e
 swapoff -a
-sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sed -i '/ swap / Ys/^\(.*\)$/#\1/g' /etc/fstab
+
+
+
 modprobe overlay
 modprobe br_netfilter
 echo -e "Install containerd..."

@@ -177,6 +177,7 @@ Once the raspberryPi is running , let's connect using ssh and install :
 first let's enable cgroup:
 ```shell
 sudo sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/' /boot/firmware/cmdline.txt
+sudo apt install systemd-resolved
 sudo reboot
 ```
 once the device rebooted, let's reconnect and install all the k8s components:
