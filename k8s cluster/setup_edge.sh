@@ -78,6 +78,8 @@ sudo sysctl --system
 # Install tools
 echo -e "Install utility tools..."
 sudo apt-get -y install etcd-client jq
+sudo apt-get install software-properties-common
+
 sudo add-apt-repository -y ppa:rmescandon/yq
 sudo apt update
 sudo apt install -y yq
@@ -87,7 +89,7 @@ echo -e "Reload and Restart daemons..."
 sudo sysctl -p
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
-sudo systemctl restart containerd.service
+sudo systemctl restart containerd
 
 
 echo -e "Setup has been completed."
